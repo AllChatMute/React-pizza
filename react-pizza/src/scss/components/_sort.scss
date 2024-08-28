@@ -1,6 +1,7 @@
 @import '../variables.scss';
 
 .sort {
+  user-select: none;
   position: relative;
   &__label {
     display: flex;

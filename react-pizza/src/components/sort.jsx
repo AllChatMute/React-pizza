@@ -1,13 +1,16 @@
 import { useState } from "react";
+import PropTypes from "prop-types";
 
-const Sort = () => {
+const Sort = ({ value, onChangeSort, onChangeOrderType, orderType }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [selectedSort, setSelectedSort] = useState(0);
-  const sortType = ["популярности", "цене", "алфавиту"];
-  const sortName = sortType[selectedSort];
+  const sortType = [
+    { name: "популярности", sortProperty: "rating" },
+    { name: "цене", sortProperty: "price" },
+    { name: "алфавиту", sortProperty: "title" },
+  ];
 
   const handleSelectSortType = (index) => {
-    setSelectedSort(index);
+    onChangeSort(index);
     setIsVisible(!isVisible);
   };
   return (
@@ -27,18 +30,34 @@ const Sort = () => {
             />
           </svg>
           <b>Сортировка по:</b>
-          <span onClick={() => setIsVisible(!isVisible)}>{sortName}</span>
+          <span onClick={() => setIsVisible(!isVisible)}>{value.name}</span>
+          <div className="sort__arrows">
+            <button
+              className={orderType === "asc" ? "active" : ""}
+              onClick={() => onChangeOrderType("asc")}
+            >
+              ↑
+            </button>
+            <button
+              className={orderType === "desc" ? "active" : ""}
+              onClick={() => onChangeOrderType("desc")}
+            >
+              ↓
+            </button>
+          </div>
         </div>
         {isVisible && (
           <div className="sort__popup">
             <ul>
-              {sortType.map((type, index) => (
+              {sortType.map((obj, index) => (
                 <li
-                  key={type}
-                  onClick={() => handleSelectSortType(index)}
-                  className={selectedSort === index ? "active" : ""}
+                  key={index}
+                  onClick={() => handleSelectSortType(obj)}
+                  className={
+                    value.sortProperty === obj.sortProperty ? "active" : ""
+                  }
                 >
-                  {type}
+                  {obj.name}
                 </li>
               ))}
             </ul>
@@ -49,4 +68,10 @@ const Sort = () => {
   );
 };
 
+Sort.propTypes = {
+  value: PropTypes.object.isRequired,
+  onChangeSort: PropTypes.func.isRequired,
+  onChangeOrderType: PropTypes.func.isRequired,
+  orderType: PropTypes.string.isRequired,
+};
 export default Sort;

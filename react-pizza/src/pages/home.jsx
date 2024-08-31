@@ -2,6 +2,7 @@ import Categories from "../components/categories";
 import Sort from "../components/sort";
 import PizzaBlock from "../components/pizzaBlock/pizzaBlock";
 import Skeleton from "../components/pizzaBlock/skeleton";
+import Pagination from "../components/pagination/pagination";
 
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
@@ -14,6 +15,7 @@ const Home = ({ searchValue }) => {
     name: "популярности",
     sortProperty: "rating",
   });
+  const [page, setPage] = useState(0);
   const [orderType, setOrderType] = useState("asc");
   useEffect(() => {
     setIsLoading(true);
@@ -22,7 +24,9 @@ const Home = ({ searchValue }) => {
     const search = searchValue ? `&search=${searchValue}` : "";
 
     fetch(
-      `https://66cf3d37901aab24842179de.mockapi.io/Items?${category}sortBy=${sort}&order=${orderType}${search}`
+      `https://66cf3d37901aab24842179de.mockapi.io/Items?page=${
+        page + 1
+      }&limit=4&${category}sortBy=${sort}&order=${orderType}${search}`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -30,10 +34,9 @@ const Home = ({ searchValue }) => {
         setIsLoading(false);
       });
     window.scrollTo(0, 0);
-  }, [categoryId, sortType, orderType, searchValue]);
+  }, [categoryId, sortType, orderType, searchValue, page]);
 
   const pizzas = items.map((item) => <PizzaBlock key={item.id} {...item} />);
-
   const skeletons = [1, 2, 3, 4, 5, 6].map((item) => <Skeleton key={item} />);
 
   return (
@@ -53,6 +56,7 @@ const Home = ({ searchValue }) => {
         </div>
         <h2 className="content__title">Все пиццы</h2>
         <div className="content__items">{isLoading ? skeletons : pizzas}</div>
+        <Pagination items={items} setPage={(index) => setPage(index)} />
       </div>
     </>
   );

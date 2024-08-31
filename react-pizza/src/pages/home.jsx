@@ -4,10 +4,10 @@ import PizzaBlock from "../components/pizzaBlock/pizzaBlock";
 import Skeleton from "../components/pizzaBlock/skeleton";
 import Pagination from "../components/pagination/pagination";
 
-import PropTypes from "prop-types";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { SearchContext } from "../App";
 
-const Home = ({ searchValue }) => {
+const Home = () => {
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [categoryId, setCategoryId] = useState(0);
@@ -17,6 +17,7 @@ const Home = ({ searchValue }) => {
   });
   const [page, setPage] = useState(0);
   const [orderType, setOrderType] = useState("asc");
+  const { searchValue } = useContext(SearchContext);
   useEffect(() => {
     setIsLoading(true);
     const category = categoryId > 0 ? `category=${categoryId}&` : ``;
@@ -30,7 +31,7 @@ const Home = ({ searchValue }) => {
     )
       .then((response) => response.json())
       .then((data) => {
-        setItems(data);
+        data === "Not found" ? setItems([]) : setItems(data);
         setIsLoading(false);
       });
     window.scrollTo(0, 0);
@@ -56,14 +57,10 @@ const Home = ({ searchValue }) => {
         </div>
         <h2 className="content__title">Все пиццы</h2>
         <div className="content__items">{isLoading ? skeletons : pizzas}</div>
-        <Pagination items={items} setPage={(index) => setPage(index)} />
+        <Pagination setPage={(index) => setPage(index)} />
       </div>
     </>
   );
-};
-
-Home.propTypes = {
-  searchValue: PropTypes.string.isRequired,
 };
 
 export default Home;

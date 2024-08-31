@@ -2,14 +2,8 @@ import ReactPaginate from "react-paginate";
 import PropTypes from "prop-types";
 import styles from "./pagination.module.scss";
 
-const Pagination = ({ items, setPage }) => {
-  const itemsPerPage = 8;
-
+const Pagination = ({ setPage }) => {
   const handlePageClick = (event) => {
-    const newOffset = (event.selected * itemsPerPage) % items.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
     setPage(event.selected);
   };
 
@@ -29,7 +23,6 @@ const Pagination = ({ items, setPage }) => {
   );
 };
 Pagination.propTypes = {
-  items: PropTypes.array.isRequired,
   setPage: PropTypes.func.isRequired,
 };
 

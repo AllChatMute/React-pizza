@@ -1,16 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+//Состояния
 const initialState = {
   categoryId: 0,
+  currentPage: 0,
   sort: {
-    name: "популярности",
-    sortType: "rating",
+    name: "не сортировать",
+    sortType: "none",
   },
 };
 
 const filterSlice = createSlice({
+  //Имя среза
   name: "filter",
+  //Начальные значения
   initialState,
+  //Функции управления состоянием
   reducers: {
     setCategoryId(state, action) {
       state.categoryId = action.payload;
@@ -18,9 +23,14 @@ const filterSlice = createSlice({
     setSortType(state, action) {
       state.sort = action.payload;
     },
+    setCurrentPage(state, action) {
+      state.currentPage = action.payload;
+    },
   },
 });
 
-export const { setCategoryId, setSortType } = filterSlice.actions;
+//Экспорт функций
+export const { setCategoryId, setSortType, setCurrentPage } =
+  filterSlice.actions;
 
 export default filterSlice.reducer;

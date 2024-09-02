@@ -7,16 +7,20 @@ import Pagination from "../components/pagination/pagination";
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect, useContext } from "react";
 import { SearchContext } from "../App";
-import { setCategoryId } from "../redux/slices/filterSlice";
+import { setCategoryId, setCurrentPage } from "../redux/slices/filterSlice";
+import axios from "axios";
 
 const Home = () => {
   const categoryId = useSelector((state) => state.filter.categoryId);
   const sortType = useSelector((state) => state.filter.sort);
+  const currentPage = useSelector((state) => state.filter.currentPage);
+
   const dispatch = useDispatch();
 
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [page, setPage] = useState(0);
+  // const [page, setPage] = useState(0);
+
   const [orderType, setOrderType] = useState("asc");
   const { searchValue } = useContext(SearchContext);
 
@@ -30,22 +34,25 @@ const Home = () => {
     const sort = sortType.sortProperty;
     const search = searchValue ? `&search=${searchValue}` : "";
 
-    fetch(
-      `https://66cf3d37901aab24842179de.mockapi.io/Items?page=${
-        page + 1
-      }&limit=4&${category}sortBy=${sort}&order=${orderType}${search}`
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        data === "Not found" ? setItems([]) : setItems(data);
+    axios
+      .get(
+        `https://66cf3d37901aab24842179de.mockapi.io/Items?page=${
+          currentPage + 1
+        }&limit=4&${category}sortBy=${sort}&order=${orderType}${search}`
+      )
+      .then((response) => {
+        response.data === "Not found" ? setItems([]) : setItems(response.data);
         setIsLoading(false);
       });
     window.scrollTo(0, 0);
-  }, [categoryId, sortType, orderType, searchValue, page]);
+  }, [categoryId, sortType, orderType, searchValue, currentPage]);
 
   const pizzas = items.map((item) => <PizzaBlock key={item.id} {...item} />);
   const skeletons = [1, 2, 3, 4, 5, 6].map((item) => <Skeleton key={item} />);
 
+  const handleChangePage = (index) => {
+    dispatch(setCurrentPage(index));
+  };
   return (
     <>
       <div className="container">
@@ -58,7 +65,7 @@ const Home = () => {
         </div>
         <h2 className="content__title">Все пиццы</h2>
         <div className="content__items">{isLoading ? skeletons : pizzas}</div>
-        <Pagination setPage={(index) => setPage(index)} />
+        <Pagination setCurrentPage={handleChangePage} />
       </div>
     </>
   );

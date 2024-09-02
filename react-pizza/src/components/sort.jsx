@@ -1,18 +1,29 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
+import { setSortType } from "../redux/slices/filterSlice";
 
-const Sort = ({ value, onChangeSort, onChangeOrderType, orderType }) => {
+const sortTypes = [
+  { name: "популярности", sortProperty: "rating" },
+  { name: "цене", sortProperty: "price" },
+  { name: "алфавиту", sortProperty: "title" },
+];
+
+const Sort = ({ onChangeOrderType, orderType }) => {
+  const sort = useSelector((state) => state.filter.sort);
+  const dispatch = useDispatch();
+
   const [isVisible, setIsVisible] = useState(false);
-  const sortType = [
-    { name: "популярности", sortProperty: "rating" },
-    { name: "цене", sortProperty: "price" },
-    { name: "алфавиту", sortProperty: "title" },
-  ];
+
+  const onChangeSort = (obj) => {
+    dispatch(setSortType(obj));
+  };
 
   const handleSelectSortType = (index) => {
     onChangeSort(index);
     setIsVisible(!isVisible);
   };
+
   return (
     <>
       <div className="sort">
@@ -30,7 +41,7 @@ const Sort = ({ value, onChangeSort, onChangeOrderType, orderType }) => {
             />
           </svg>
           <b>Сортировка по:</b>
-          <span onClick={() => setIsVisible(!isVisible)}>{value.name}</span>
+          <span onClick={() => setIsVisible(!isVisible)}>{sort.name}</span>
           <div className="sort__arrows">
             <button
               className={orderType === "asc" ? "active" : ""}
@@ -49,12 +60,12 @@ const Sort = ({ value, onChangeSort, onChangeOrderType, orderType }) => {
         {isVisible && (
           <div className="sort__popup">
             <ul>
-              {sortType.map((obj, index) => (
+              {sortTypes.map((obj, index) => (
                 <li
                   key={index}
                   onClick={() => handleSelectSortType(obj)}
                   className={
-                    value.sortProperty === obj.sortProperty ? "active" : ""
+                    sort.sortProperty === obj.sortProperty ? "active" : ""
                   }
                 >
                   {obj.name}
@@ -69,8 +80,6 @@ const Sort = ({ value, onChangeSort, onChangeOrderType, orderType }) => {
 };
 
 Sort.propTypes = {
-  value: PropTypes.object.isRequired,
-  onChangeSort: PropTypes.func.isRequired,
   onChangeOrderType: PropTypes.func.isRequired,
   orderType: PropTypes.string.isRequired,
 };

@@ -12,7 +12,7 @@ export const SearchContext = createContext();
 
 const App = () => {
   const [searchValue, setSearchValue] = useState("");
-  console.log(searchValue);
+
   return (
     <>
       <div className="wrapper">

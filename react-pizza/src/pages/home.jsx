@@ -8,16 +8,18 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect, useContext } from "react";
 import { SearchContext } from "../App";
 import { setCategoryId, setCurrentPage } from "../redux/slices/filterSlice";
+import { setItems } from "../redux/slices/pizzaSlice";
 import axios from "axios";
 
 const Home = () => {
   const categoryId = useSelector((state) => state.filter.categoryId);
   const sortType = useSelector((state) => state.filter.sort);
   const currentPage = useSelector((state) => state.filter.currentPage);
+  const items = useSelector((state) => state.pizza.items);
 
   const dispatch = useDispatch();
 
-  const [items, setItems] = useState([]);
+  // const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   // const [page, setPage] = useState(0);
 
@@ -29,24 +31,33 @@ const Home = () => {
   };
 
   useEffect(() => {
-    setIsLoading(true);
-    const category = categoryId > 0 ? `category=${categoryId}&` : ``;
-    const sort = sortType.sortProperty;
-    const search = searchValue ? `&search=${searchValue}` : "";
+    const getPizzas = async () => {
+      try {
+        setIsLoading(true);
+        const category = categoryId > 0 ? `category=${categoryId}&` : ``;
+        const sort = sortType.sortProperty;
+        const search = searchValue ? `&search=${searchValue}` : "";
 
-    axios
-      .get(
-        `https://66cf3d37901aab24842179de.mockapi.io/Items?page=${
-          currentPage + 1
-        }&limit=4&${category}sortBy=${sort}&order=${orderType}${search}`
-      )
-      .then((response) => {
-        response.data === "Not found" ? setItems([]) : setItems(response.data);
+        const response = await axios.get(
+          `https://66cf3d37901aab24842179de.mockapi.io/Items?page=${
+            currentPage + 1
+          }&limit=4&${category}sortBy=${sort}&order=${orderType}${search}`
+        );
+
+        const data = await response.data;
+        data === "Not found"
+          ? dispatch(setItems([]))
+          : dispatch(setItems(data));
+        window.scrollTo(0, 0);
+      } catch (error) {
+        console.error(error);
+      } finally {
         setIsLoading(false);
-      });
-    window.scrollTo(0, 0);
-  }, [categoryId, sortType, orderType, searchValue, currentPage]);
+      }
+    };
 
+    getPizzas();
+  }, [categoryId, sortType, orderType, searchValue, currentPage, dispatch]);
   const pizzas = items.map((item) => <PizzaBlock key={item.id} {...item} />);
   const skeletons = [1, 2, 3, 4, 5, 6].map((item) => <Skeleton key={item} />);
 

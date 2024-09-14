@@ -2,6 +2,7 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
 import { addItem } from "../../redux/slices/cartSlice";
+import { Link } from "react-router-dom";
 
 const pizzaType = ["тонкое", "традиционное"];
 
@@ -30,9 +31,11 @@ const PizzaBlock = ({ id, title, price, imageUrl, sizes, types }) => {
     <>
       <div className="pizza-block-wrapper">
         <div className="pizza-block">
-          <img className="pizza-block__image" src={imageUrl} alt="Pizza" />
+          <Link to={`/pizza/${id}`}>
+            <img className="pizza-block__image" src={imageUrl} alt="Pizza" />
 
-          <h4 className="pizza-block__title">{title}</h4>
+            <h4 className="pizza-block__title">{title}</h4>
+          </Link>
           <div className="pizza-block__selector">
             <ul>
               {types.map((type) => (
@@ -86,7 +89,7 @@ const PizzaBlock = ({ id, title, price, imageUrl, sizes, types }) => {
 };
 
 PizzaBlock.propTypes = {
-  id: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
   imageUrl: PropTypes.string.isRequired,

@@ -5,8 +5,7 @@ import Skeleton from "../components/pizzaBlock/skeleton";
 import Pagination from "../components/pagination/pagination";
 
 import { useSelector, useDispatch } from "react-redux";
-import { useState, useEffect, useContext } from "react";
-import { SearchContext } from "../App";
+import { useState, useEffect } from "react";
 import { setCategoryId, setCurrentPage } from "../redux/slices/filterSlice";
 import { setItems } from "../redux/slices/pizzaSlice";
 import axios from "axios";
@@ -24,7 +23,8 @@ const Home = () => {
   // const [page, setPage] = useState(0);
 
   const [orderType, setOrderType] = useState("asc");
-  const { searchValue } = useContext(SearchContext);
+  // const { searchValue } = useContext(SearchContext);
+  const searchValue = useSelector((state) => state.search.searchValue);
 
   const onChangeCategory = (id) => {
     dispatch(setCategoryId(id));

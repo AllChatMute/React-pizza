@@ -4,11 +4,26 @@ import {
   increaseItemCount,
   decreaseItemCount,
 } from "../redux/slices/cartSlice";
+import React from "react";
 
-// eslint-disable-next-line react/prop-types
-const CartItem = ({ id, title, type, price, count, imageUrl }) => {
+interface props {
+  id: string;
+  title: string;
+  type: string;
+  price: number;
+  count: number;
+  imageUrl: string;
+}
+
+const CartItem: React.FC = ({
+  id,
+  title,
+  type,
+  price,
+  count,
+  imageUrl,
+}: props) => {
   const dispatch = useDispatch();
-
   return (
     <>
       <div className="cart__item">

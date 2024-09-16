@@ -1,6 +1,11 @@
-import PropTypes from "prop-types";
+import React from "react";
 
-const Categories = ({ value, onChangeCategory }) => {
+interface props {
+  value: number;
+  onChangeCategory: Function;
+}
+
+const Categories: React.FC = ({ value, onChangeCategory }: props) => {
   const categories = [
     { category: "Все", index: 0 },
     { category: "Мясные", index: 1 },
@@ -29,8 +34,4 @@ const Categories = ({ value, onChangeCategory }) => {
   );
 };
 
-Categories.propTypes = {
-  value: PropTypes.number.isRequired,
-  onChangeCategory: PropTypes.func.isRequired,
-};
 export default Categories;

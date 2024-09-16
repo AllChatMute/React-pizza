@@ -1,21 +1,46 @@
-import { useState } from "react";
-import PropTypes from "prop-types";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { addItem } from "../../redux/slices/cartSlice";
 import { Link } from "react-router-dom";
+import state from "../../@types/interfaces/state.interface";
 
 const pizzaType = ["тонкое", "традиционное"];
 
-const PizzaBlock = ({ id, title, price, imageUrl, sizes, types }) => {
+interface pizzaItem {
+  id: string;
+  title: string;
+  price: number;
+  imageUrl: string;
+  type: string;
+  size: number;
+}
+
+interface props {
+  id: string;
+  title: string;
+  price: number;
+  imageUrl: string;
+  sizes: number[];
+  types: number[];
+}
+
+const PizzaBlock: React.FC = ({
+  id,
+  title,
+  price,
+  imageUrl,
+  sizes,
+  types,
+}: props) => {
   const [activeType, setActiveType] = useState(0);
   const [activeSize, setActiveSize] = useState(0);
-  const cartItem = useSelector((state) =>
-    state.cart.items.find((obj) => obj.id === id)
+  const cartItem = useSelector((state: state) =>
+    state.cart.items.find((obj: { id: string }) => obj.id === id)
   );
   const dispatch = useDispatch();
 
   const handleAddItem = () => {
-    const item = {
+    const item: pizzaItem = {
       id,
       title,
       price,
@@ -86,15 +111,6 @@ const PizzaBlock = ({ id, title, price, imageUrl, sizes, types }) => {
       </div>
     </>
   );
-};
-
-PizzaBlock.propTypes = {
-  id: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
-  imageUrl: PropTypes.string.isRequired,
-  sizes: PropTypes.array.isRequired,
-  types: PropTypes.array.isRequired,
 };
 
 export default PizzaBlock;

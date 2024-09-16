@@ -1,8 +1,12 @@
+import React from "react";
 import ReactPaginate from "react-paginate";
-import PropTypes from "prop-types";
 import styles from "./pagination.module.scss";
 
-const Pagination = ({ setCurrentPage }) => {
+interface props {
+  setCurrentPage: Function;
+}
+
+const Pagination: React.FC = ({ setCurrentPage }: props) => {
   const handlePageClick = (event) => {
     setCurrentPage(event.selected);
   };
@@ -21,9 +25,6 @@ const Pagination = ({ setCurrentPage }) => {
       />
     </>
   );
-};
-Pagination.propTypes = {
-  setCurrentPage: PropTypes.func.isRequired,
 };
 
 export default Pagination;

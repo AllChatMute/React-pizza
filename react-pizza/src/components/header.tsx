@@ -1,10 +1,14 @@
+import React from "react";
+
 import { Link, useLocation } from "react-router-dom";
 import logoSvg from "../assets/img/pizza-logo.svg";
 import Search from "./search/search";
 import { useSelector } from "react-redux";
 
-const Header = () => {
-  const { totalPrice, items } = useSelector((state) => state.cart);
+import state from "../@types/interfaces/state.interface";
+
+const Header: React.FC = () => {
+  const { totalPrice, items } = useSelector((state: state) => state.cart);
   const { pathname } = useLocation();
 
   return (
@@ -55,7 +59,12 @@ const Header = () => {
                     strokeLinejoin="round"
                   />
                 </svg>
-                <span>{items.reduce((sum, obj) => sum + obj.count, 0)}</span>
+                <span>
+                  {items.reduce(
+                    (sum: number, obj: { count: number }) => sum + obj.count,
+                    0
+                  )}
+                </span>
               </Link>
             )}
           </div>

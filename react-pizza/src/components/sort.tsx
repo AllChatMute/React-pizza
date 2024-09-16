@@ -1,27 +1,31 @@
+import React from "react";
 import { useEffect, useRef, useState } from "react";
-import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { setSortType } from "../redux/slices/filterSlice";
+import state from "../@types/interfaces/state.interface";
 
-const sortTypes = [
+interface props {
+  onChangeOrderType: Function;
+  orderType: string;
+}
+
+type sort = { name: string; sortProperty: string }[];
+
+const sortTypes: sort = [
   { name: "популярности", sortProperty: "rating" },
   { name: "цене", sortProperty: "price" },
   { name: "алфавиту", sortProperty: "title" },
 ];
 
-const Sort = ({ onChangeOrderType, orderType }) => {
-  const sort = useSelector((state) => state.filter.sort);
-  const sortRef = useRef();
+const Sort: React.FC = ({ onChangeOrderType, orderType }: props) => {
+  const sort = useSelector((state: state) => state.filter.sort);
+  const sortRef = useRef<HTMLDivElement | null>();
   const dispatch = useDispatch();
 
   const [isVisible, setIsVisible] = useState(false);
 
-  const onChangeSort = (obj) => {
+  const handleSelectSortType = (obj: object) => {
     dispatch(setSortType(obj));
-  };
-
-  const handleSelectSortType = (index) => {
-    onChangeSort(index);
     setIsVisible(!isVisible);
   };
 
@@ -77,9 +81,7 @@ const Sort = ({ onChangeOrderType, orderType }) => {
                 <li
                   key={index}
                   onClick={() => handleSelectSortType(obj)}
-                  className={
-                    sort.sortProperty === obj.sortProperty ? "active" : ""
-                  }
+                  className={sort.sortType === obj.sortProperty ? "active" : ""}
                 >
                   {obj.name}
                 </li>
@@ -92,8 +94,4 @@ const Sort = ({ onChangeOrderType, orderType }) => {
   );
 };
 
-Sort.propTypes = {
-  onChangeOrderType: PropTypes.func.isRequired,
-  orderType: PropTypes.string.isRequired,
-};
 export default Sort;

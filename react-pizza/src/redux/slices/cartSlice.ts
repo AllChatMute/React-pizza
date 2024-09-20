@@ -1,6 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
+import cartItem from "../../@types/interfaces/cartItem.interface";
 
-const initialState = {
+interface initialState {
+  totalPrice: number;
+  items: object[];
+}
+
+// type pizzaItemWithCount = pizzaItem &
+
+const initialState: initialState = {
   totalPrice: 0,
   items: [],
 };
@@ -10,27 +18,30 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addItem(state, action) {
-      const findItem = state.items.find((obj) => obj.id === action.payload.id);
+      const findItem = state.items.find(
+        (obj: { id: string }) => obj.id === action.payload.id
+      ) as cartItem;
 
       if (findItem) {
         findItem.count++;
       } else {
-        state.items.push({ ...action.payload, count: 1 });
+        const itemToAdd: cartItem = { ...action.payload, count: 1 };
+        state.items.push(itemToAdd);
       }
 
       state.totalPrice = state.items.reduce(
-        (sum, obj) => obj.price * obj.count + sum,
+        (sum, obj: cartItem) => obj.price * obj.count + sum,
         0
       );
     },
     removeItem(state, action) {
       const filteredItems = state.items.filter(
-        (obj) => obj.id !== action.payload
+        (obj: cartItem) => obj.id !== action.payload
       );
       state.items = filteredItems;
 
       state.totalPrice = state.items.reduce(
-        (sum, obj) => obj.price * obj.count + sum,
+        (sum, obj: cartItem) => obj.price * obj.count + sum,
         0
       );
     },
@@ -39,26 +50,30 @@ const cartSlice = createSlice({
       state.totalPrice = 0;
     },
     increaseItemCount(state, action) {
-      const findItem = state.items.find((obj) => obj.id === action.payload);
+      const findItem = state.items.find(
+        (obj: cartItem) => obj.id === action.payload
+      ) as cartItem;
 
       if (findItem) {
         findItem.count++;
       }
 
       state.totalPrice = state.items.reduce(
-        (sum, obj) => obj.price * obj.count + sum,
+        (sum, obj: cartItem) => obj.price * obj.count + sum,
         0
       );
     },
     decreaseItemCount(state, action) {
-      const findItem = state.items.find((obj) => obj.id === action.payload);
+      const findItem = state.items.find(
+        (obj: cartItem) => obj.id === action.payload
+      ) as cartItem;
 
       if (findItem && findItem.count > 1) {
         findItem.count--;
       }
 
       state.totalPrice = state.items.reduce(
-        (sum, obj) => obj.price * obj.count + sum,
+        (sum, obj: cartItem) => obj.price * obj.count + sum,
         0
       );
     },

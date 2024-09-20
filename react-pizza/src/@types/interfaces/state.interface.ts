@@ -1,3 +1,4 @@
+import pizzaItem from "./pizzaItem.interface";
 export default interface state {
   cart: {
     items: object[];
@@ -8,7 +9,13 @@ export default interface state {
     currentPage: number;
     sort: {
       name: string;
-      sortType: string;
+      sortProperty: string;
     };
+  };
+  pizza: {
+    items: pizzaItem[];
+  };
+  search: {
+    searchValue: string;
   };
 }

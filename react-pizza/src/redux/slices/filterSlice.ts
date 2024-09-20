@@ -1,12 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-//Состояния
-const initialState = {
+interface initialState {
+  categoryId: number;
+  currentPage: number;
+  sort: {
+    name: string;
+    sortProperty: string;
+  };
+}
+
+const initialState: initialState = {
   categoryId: 0,
   currentPage: 0,
   sort: {
     name: "не сортировать",
-    sortType: "none",
+    sortProperty: "none",
   },
 };
 

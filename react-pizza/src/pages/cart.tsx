@@ -1,12 +1,18 @@
+import * as React from "react";
+
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { clearItems } from "../redux/slices/cartSlice";
 import CartItem from "../components/cartItem";
 import CartEmpty from "../components/cartEmpty";
 
-const Cart = () => {
-  const totalPrice = useSelector((state) => state.cart.totalPrice);
-  const items = useSelector((state) => state.cart.items);
+import state from "../@types/interfaces/state.interface";
+import cartItem from "../@types/interfaces/cartItem.interface";
+
+const Cart: React.FC = () => {
+  const totalPrice = useSelector((state: state) => state.cart.totalPrice);
+  const items = useSelector((state: state) => state.cart.items);
+
   const dispatch = useDispatch();
 
   const handleClearCart = () => {
@@ -95,7 +101,7 @@ const Cart = () => {
               </div>
             </div>
             <div className="content__items">
-              {items.map((item) => (
+              {items.map((item: cartItem) => (
                 <CartItem key={item.id} {...item} />
               ))}
             </div>
@@ -105,7 +111,8 @@ const Cart = () => {
                   {" "}
                   Всего пицц:{" "}
                   <b>
-                    {items.reduce((sum, obj) => sum + obj.count, 0)} шт.
+                    {items.reduce((sum, obj: cartItem) => sum + obj.count, 0)}{" "}
+                    шт.
                   </b>{" "}
                 </span>
                 <span>

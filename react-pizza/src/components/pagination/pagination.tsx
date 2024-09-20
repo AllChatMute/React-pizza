@@ -7,7 +7,7 @@ interface props {
 }
 
 const Pagination: React.FC = ({ setCurrentPage }: props) => {
-  const handlePageClick = (event) => {
+  const handlePageClick = (event: { selected: number }) => {
     setCurrentPage(event.selected);
   };
 

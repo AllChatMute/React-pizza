@@ -1,3 +1,4 @@
+import * as React from "react";
 import Categories from "../components/categories";
 import Sort from "../components/sort";
 import PizzaBlock from "../components/pizzaBlock/pizzaBlock";
@@ -9,12 +10,13 @@ import { useState, useEffect } from "react";
 import { setCategoryId, setCurrentPage } from "../redux/slices/filterSlice";
 import { setItems } from "../redux/slices/pizzaSlice";
 import axios from "axios";
+import state from "../@types/interfaces/state.interface";
 
 const Home = () => {
-  const categoryId = useSelector((state) => state.filter.categoryId);
-  const sortType = useSelector((state) => state.filter.sort);
-  const currentPage = useSelector((state) => state.filter.currentPage);
-  const items = useSelector((state) => state.pizza.items);
+  const categoryId = useSelector((state: state) => state.filter.categoryId);
+  const sortType = useSelector((state: state) => state.filter.sort);
+  const currentPage = useSelector((state: state) => state.filter.currentPage);
+  const items = useSelector((state: state) => state.pizza.items);
 
   const dispatch = useDispatch();
 
@@ -24,9 +26,9 @@ const Home = () => {
 
   const [orderType, setOrderType] = useState("asc");
   // const { searchValue } = useContext(SearchContext);
-  const searchValue = useSelector((state) => state.search.searchValue);
+  const searchValue = useSelector((state: state) => state.search.searchValue);
 
-  const onChangeCategory = (id) => {
+  const onChangeCategory = (id: number) => {
     dispatch(setCategoryId(id));
   };
 
@@ -70,7 +72,7 @@ const Home = () => {
         <div className="content__top">
           <Categories value={categoryId} onChangeCategory={onChangeCategory} />
           <Sort
-            onChangeOrderType={(orderType) => setOrderType(orderType)}
+            onChangeOrderType={(orderType: string) => setOrderType(orderType)}
             orderType={orderType}
           />
         </div>

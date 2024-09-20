@@ -4,16 +4,9 @@ import { addItem } from "../../redux/slices/cartSlice";
 import { Link } from "react-router-dom";
 import state from "../../@types/interfaces/state.interface";
 
+import pizzaItem from "../../@types/interfaces/pizzaItem.interface";
+import cartItem from "../../@types/interfaces/cartItem.interface";
 const pizzaType = ["тонкое", "традиционное"];
-
-interface pizzaItem {
-  id: string;
-  title: string;
-  price: number;
-  imageUrl: string;
-  type: string;
-  size: number;
-}
 
 interface props {
   id: string;
@@ -36,7 +29,7 @@ const PizzaBlock: React.FC = ({
   const [activeSize, setActiveSize] = useState(0);
   const cartItem = useSelector((state: state) =>
     state.cart.items.find((obj: { id: string }) => obj.id === id)
-  );
+  ) as cartItem;
   const dispatch = useDispatch();
 
   const handleAddItem = () => {
